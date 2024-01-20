@@ -1,7 +1,7 @@
 "use server"; // It won't be sent to server ever, it's like creating a API route
 
 import { signIn } from "@/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/lib/schemas";
 import * as z from "zod";
 import { AuthError } from "next-auth";

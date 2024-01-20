@@ -8,9 +8,11 @@ const font = Poppins({
 
 interface HeaderProps {
   label: string;
+  headerMessage?: string
 };
 
 export const HeaderComponent = ({ 
+  headerMessage = "Continue with quill.",
   label
 }: HeaderProps) => {
   return (
@@ -19,7 +21,7 @@ export const HeaderComponent = ({
         "text-3xl font-semibold",
         font.className
       )}>
-        Continue with quill.
+        {headerMessage}
       </h1>
       <p className="text-muted-foreground text-sm">
         {label}

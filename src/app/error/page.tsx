@@ -1,13 +1,13 @@
 import AuthCardWrapper from '@/components/auth-card-wrapper'
-import { LoginForm } from '@/components/login-form'
+import ErrorCard from '@/components/error-card'
 import React from 'react'
 
-const page = () => {
+const ErrorPage = () => {
   return (
     <AuthCardWrapper>
-      <LoginForm />
+      <ErrorCard />
     </AuthCardWrapper>
   )
 }
 
-export default page
+export default ErrorPage
