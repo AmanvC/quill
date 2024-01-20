@@ -12,13 +12,13 @@ interface HeaderProps {
 };
 
 export const HeaderComponent = ({ 
-  headerMessage = "Continue with quill.",
+  headerMessage = "Continue with quillread.",
   label
 }: HeaderProps) => {
   return (
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
       <h1 className={cn(
-        "text-3xl font-semibold",
+        "text-3xl font-semibold text-center",
         font.className
       )}>
         {headerMessage}
