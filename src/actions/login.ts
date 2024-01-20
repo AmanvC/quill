@@ -5,6 +5,8 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/lib/schemas";
 import * as z from "zod";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/lib/tokens";
+import { getUserByEmail } from "@/data/user";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -14,6 +16,19 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedFields.data;
+
+  const existingUser = await getUserByEmail(email);
+  if(!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: "Email is not registered!" }
+  }
+
+  if(!existingUser.emailVerified) {
+    return { error: "Email is not verified!" }
+    // TODO - Create a new compoenent or append in old one to add a resend email button
+    // OR create a new link to send verification email (NEW COMPOENENT LIKE LOGIN AND REGISTER)
+    // const verificationToken = await generateVerificationToken(existingUser.email);
+    // return { success: "A confirmation email has been sent to the registered mail ID." }
+  }
 
   try{
     await signIn("credentials",  {

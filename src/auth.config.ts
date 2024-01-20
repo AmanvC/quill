@@ -4,7 +4,7 @@ import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { LoginSchema } from "@/lib/schemas";
-import { getUserByEmail } from "@/lib/user";
+import { getUserByEmail } from "@/data/user";
 import bcrypt from "bcryptjs";
 
 // We can access routes through API, so we should authenticate from here as well
