@@ -7,6 +7,8 @@ import * as z from "zod";
 import { AuthError } from "next-auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
+import { getVerificationTokenByEmail } from "@/data/verification-token";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -23,11 +25,14 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   if(!existingUser.emailVerified) {
+    const existingToken = await getVerificationTokenByEmail(existingUser.email);
+    const hasExpired = new Date(existingToken.expires) < new Date();
+    if(hasExpired) {
+      const newToken = await generateVerificationToken(existingUser.email);
+      await sendVerificationEmail(existingUser.name, newToken.email, newToken.token);
+      return { success: "A confirmation email has been sent to the registered mail ID." }
+    }
     return { error: "Email is not verified!" }
-    // TODO - Create a new compoenent or append in old one to add a resend email button
-    // OR create a new link to send verification email (NEW COMPOENENT LIKE LOGIN AND REGISTER)
-    // const verificationToken = await generateVerificationToken(existingUser.email);
-    // return { success: "A confirmation email has been sent to the registered mail ID." }
   }
 
   try{

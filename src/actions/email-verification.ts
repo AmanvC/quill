@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 export const emailVerification = async(token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
   if(!existingToken){
-    return { error: "Something went wrong!" }
+    return { error: "Invalid link!" }
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
