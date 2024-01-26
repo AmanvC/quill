@@ -14,12 +14,16 @@ import {
 } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { useCurrentUser } from "@/hooks/UseCurrentUser";
-import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
+import { logout } from "@/actions/logout";
 
 const UserButton = () => {
   const user = useCurrentUser();
+
+  const handleLogout = () => {
+    logout().then((res) => console.log(res));
+  }
 
   return (
     <DropdownMenu>
@@ -32,11 +36,11 @@ const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <Button onClick={() => signOut()} size="sm" variant="ghost">
-            <LogOut className="h-4 w-4 mr-2" /> 
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+          <div className="flex gap-2 items-center" >
+            <LogOut className="h-4 w-4" /> 
             Logout
-          </Button>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

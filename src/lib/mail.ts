@@ -2,10 +2,11 @@ import EmailTemplate from "@/components/EmailTemplate";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 export const sendVerificationEmail = async(name: string, email: string, token: string) => {
   try {
-    const confirmLink = `http://localhost:3000/mail/email-verification?token=${token}`;
+    const confirmLink = `${domain}/mail/email-verification?token=${token}`;
     await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,
@@ -19,7 +20,7 @@ export const sendVerificationEmail = async(name: string, email: string, token: s
 
 export const sendPasswordResetEmail = async(name: string, email: string, token: string) => {
   try {
-    const resetLink = `http://localhost:3000/mail/reset-password?token=${token}`;
+    const resetLink = `${domain}/mail/reset-password?token=${token}`;
     await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,

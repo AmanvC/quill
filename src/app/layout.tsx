@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en" className="light">
         <body className={cn('min-h-screen font-sans antialiased grainy', inter.className)}>
+          <Toaster />
           <Navbar />
           {children}
         </body>
