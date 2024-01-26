@@ -3,10 +3,10 @@
 import React from 'react'
 import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
-import { Button, buttonVariants } from "./ui/button"
+import { buttonVariants } from "./ui/button"
 import { ArrowRight } from "lucide-react"
-import { signOut } from 'next-auth/react';
 import { useCurrentUser } from '@/hooks/UseCurrentUser';
+import UserButton from '@/components/UserButton';
 
 const Navbar = () => {
   const user = useCurrentUser();
@@ -31,7 +31,7 @@ const Navbar = () => {
                 variant: 'ghost',
                 size: 'sm'
               })} href="/dashboard">Dashboard</Link>
-              <Button onClick={() => signOut()}>Logout</Button>
+              <UserButton />
             </>
               : 
             <>
