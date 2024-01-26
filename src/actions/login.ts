@@ -26,10 +26,10 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
 
   if(!existingUser.emailVerified) {
     const existingToken = await getVerificationTokenByEmail(existingUser.email);
-    const hasExpired = new Date(existingToken.expires) < new Date();
+    const hasExpired = existingToken && new Date(existingToken.expires) < new Date();
     if(hasExpired) {
       const newToken = await generateVerificationToken(existingUser.email);
-      await sendVerificationEmail(existingUser.name, newToken.email, newToken.token);
+      await sendVerificationEmail(existingUser.name as string, newToken.email, newToken.token);
       return { success: "A confirmation email has been sent to the registered mail ID." }
     }
     return { error: "Email is not verified!" }

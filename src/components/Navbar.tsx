@@ -5,7 +5,7 @@ import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
 import { buttonVariants } from "./ui/button"
 import { ArrowRight } from "lucide-react"
-import { useCurrentUser } from '@/hooks/UseCurrentUser';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import UserButton from '@/components/UserButton';
 
 const Navbar = () => {

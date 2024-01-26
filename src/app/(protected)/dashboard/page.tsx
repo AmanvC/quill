@@ -1,6 +1,6 @@
 'use client';
 
-import { useCurrentUser } from "@/hooks/UseCurrentUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
 
 const DashboardPage = () => {

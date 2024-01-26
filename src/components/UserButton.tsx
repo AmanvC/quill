@@ -13,7 +13,7 @@ import {
   AvatarFallback
 } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
-import { useCurrentUser } from "@/hooks/UseCurrentUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { logout } from "@/actions/logout";

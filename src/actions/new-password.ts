@@ -43,10 +43,10 @@ export const newPassword = async(
 
   const existingToken = await getPasswordResetTokenByToken(token);
 
-  const existingUser = await getUserByEmail(existingToken.email);
-
+  const existingUser = existingToken && await getUserByEmail(existingToken.email);
+  
   if(!existingUser){
-    return { error: "User does not exist!" }
+    return { error: "Link expired, please request a new one!" }
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
