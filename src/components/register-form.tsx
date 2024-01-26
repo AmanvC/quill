@@ -21,6 +21,7 @@ import { FormError } from "@/components/form-error";
 import { register } from "@/actions/register";
 import { useState, useTransition } from "react"; // for promise states
 import { FormSuccess } from "@/components/form-success";
+import Loader from "@/components/loader";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -49,7 +50,9 @@ export const RegisterForm = () => {
   }
 
   return (
-    <CardWrapper 
+   <>
+    {isPending && <Loader />}
+     <CardWrapper 
       headerLabel="Create an account"
       backButtonLabel="Already registered?"
       backButtonHref="/login"
@@ -128,5 +131,6 @@ export const RegisterForm = () => {
         </form>
       </Form>
     </CardWrapper>
+   </>
   )
 }

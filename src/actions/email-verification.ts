@@ -1,5 +1,5 @@
 "use server";
-
+// TODO Update return types for all actions
 import { getUserByEmail } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verification-token";
 import { db } from "@/lib/db";

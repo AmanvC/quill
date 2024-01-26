@@ -9,19 +9,31 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { getVerificationTokenByEmail } from "@/data/verification-token";
 import { sendVerificationEmail } from "@/lib/mail";
+import { TActionResponse } from "@/lib/types";
 
-export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: string) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string
+) : Promise<TActionResponse> => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if(!validatedFields.success){
-    return {error: "Invalid fields!"};
+    return {
+      success: false,
+      errorType: 'INVALID_DATA',
+      message: 'Invalid fields!'
+    };
   }
 
   const { email, password } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
   if(!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email is not registered!" }
+    return { 
+      success: false,
+      errorType: 'NOT_REGISTERED',
+      message: 'Email is not registered!'
+    }
   }
 
   if(!existingUser.emailVerified) {
@@ -30,9 +42,16 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
     if(hasExpired) {
       const newToken = await generateVerificationToken(existingUser.email);
       await sendVerificationEmail(existingUser.name as string, newToken.email, newToken.token);
-      return { success: "A confirmation email has been sent to the registered mail ID." }
+      return { 
+        success: true,
+        message: 'A confirmation email has been sent to the registered mail ID.'
+       }
     }
-    return { error: "Email is not verified!" }
+    return { 
+      success: false,
+      errorType: 'NOT_VERIFIED',
+      message: 'Email is not verified!'
+    }
   }
 
   try{
@@ -41,13 +60,25 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     })
+    return {
+      success: true,
+      message: "..."
+    }
   }catch(error) {
     if(error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return { 
+            success: false,
+            errorType: 'CREDENTIALS_ERROR',
+            message: 'Invalid credentials!'
+          };
         default:
-          return { error: "Something went wrong!" }
+          return { 
+            success: false,
+            errorType: 'DEFAULT',
+            message: 'Something went wrong!'
+          }
       }
     }
 
