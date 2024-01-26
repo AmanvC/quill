@@ -1,12 +1,15 @@
+'use client';
+
 import React from 'react'
 import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
 import { Button, buttonVariants } from "./ui/button"
 import { ArrowRight } from "lucide-react"
-import { auth, signOut } from '@/auth'
+import { signOut } from 'next-auth/react';
+import { useCurrentUser } from '@/hooks/UseCurrentUser';
 
-const Navbar = async() => {
-  const session = await auth();
+const Navbar = () => {
+  const user = useCurrentUser();
   
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -21,19 +24,14 @@ const Navbar = async() => {
             variant: 'ghost',
             size: 'sm'
           })} href="/pricing">Pricing</Link>
-          {session 
+          {user 
               ? 
             <>
               <Link className={buttonVariants({
                 variant: 'ghost',
                 size: 'sm'
               })} href="/dashboard">Dashboard</Link>
-              <form action={async() => {
-                "use server";
-                await signOut();
-              }}>
-                <Button type="submit">Logout</Button>
-              </form>
+              <Button onClick={() => signOut()}>Logout</Button>
             </>
               : 
             <>
