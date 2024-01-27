@@ -1,20 +1,20 @@
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth, { DefaultSession, type Session } from "next-auth"
 import authConfig from "@/auth.config"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "@/lib/db"
 import { getUserById } from "@/data/user";
-// import { UserRole } from "@prisma/client";
 
 // FOR TYPES
-// declare module "next-auth" {
-//   interface Session {
-//     user: {
-//       role: UserRole
-//     } & DefaultSession["user"]
-//   }
-// }
+declare module "next-auth" {
+  interface Session {
+    user: ExtendedUser
+  }
+}
 
-// THESE METHODS ARE EXCLUSIVELY FOR SERVER COMPONENTS
+type ExtendedUser = DefaultSession["user"] & {
+  allowChangePassword: boolean
+}
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -40,9 +40,24 @@ export const {
       if(!existingUser?.emailVerified) return false;
       return true;
     },
+
+    // TODO - Bug in TS or NextAuth, will be fixed in future, remove types for params
+    async session({ token, session }: {token?: any, session: Session}) {
+      if(token.sub && session.user) {
+        session.user.allowChangePassword = token.allowChangePassword;
+      }
+      return session;
+    },
     async jwt({token}) {
+      if(!token.sub) return token;
+
+      const user = await getUserById(token.sub);
+
+      if(!user) return token;
+
+      token.allowChangePassword = user.password ? true : false;
       return token;
-    }
+    },
   },
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },

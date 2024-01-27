@@ -32,6 +32,7 @@ const Navbar = () => {
                 size: 'sm'
               })} href="/dashboard">Dashboard</Link>
               <UserButton />
+              {/* TODO Add UserButton to mobile navbar as well */}
             </>
               : 
             <>

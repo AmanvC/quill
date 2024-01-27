@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { LogOut } from "lucide-react";
+import { KeyRound, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { logout } from "@/actions/logout";
+import Link from "next/link";
 
 const UserButton = () => {
   const user = useCurrentUser();
@@ -36,6 +37,16 @@ const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {user?.allowChangePassword && (
+          <Link href="/change-password">
+            <DropdownMenuItem className="cursor-pointer">
+              <div className="flex gap-2 items-center">
+                <KeyRound className="h-4 w-4" />
+                Change Password
+              </div>
+            </DropdownMenuItem>
+          </Link>
+        )}
         <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <div className="flex gap-2 items-center" >
             <LogOut className="h-4 w-4" /> 
